@@ -11,6 +11,7 @@
 
 App::uses('ModelBehavior', 'Model');
 App::uses('Block', 'Blocks.Model');
+App::uses('NotifyDataServerToFetch', 'NetCommons.Utility');
 
 /**
  * Block Behavior
@@ -174,6 +175,10 @@ class BlockBehavior extends ModelBehavior {
 
 		//block_id, block_keyのセット
 		$this->__setBlockFields($model);
+
+		//データ管理サーバに通知する
+		//-->通知は、NetCommonsAppModel::commitで行う
+		NotifyDataServerToFetch::set();
 
 		return true;
 	}
@@ -586,6 +591,10 @@ class BlockBehavior extends ModelBehavior {
 		if (! $model->BlocksLanguage->deleteAll($conditions, false)) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
+
+		//データ管理サーバに通知する
+		//-->通知は、NetCommonsAppModel::commitで行う
+		NotifyDataServerToFetch::set();
 
 		return true;
 	}
